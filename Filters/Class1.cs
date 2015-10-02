@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Filters
+﻿namespace Filters
 {
-    public class Class1
+    public static class Filter
     {
+        public static void FilterMethod()
+        {
+            
+        }
     }
 }
