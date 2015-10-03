@@ -3,10 +3,14 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
+using Filters;
+
 namespace DesktopUI
 {
     public partial class Form1 : Form
     {
+        private readonly double[,] _kernel = { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0 } };
+
         public Form1()
         {
             InitializeComponent();
@@ -14,50 +18,27 @@ namespace DesktopUI
 
         private void openToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            Stream imageStream;
-            var openFileDialog = new OpenFileDialog();
-
-            openFileDialog.InitialDirectory = "D:\\";
-            openFileDialog.Filter = "JPEG (*.jpg)|*.jpg|PNG (*.png*)|*.png*";
-            openFileDialog.FilterIndex = 2;
-            openFileDialog.RestoreDirectory = true;
+            var openFileDialog = new OpenFileDialog
+                                     {
+                                         InitialDirectory = "C:\\",
+                                         Filter = "PNG (*.png*)|*.png|JPEG (*.jpg)|*.jpg",
+                                         FilterIndex = 2,
+                                         RestoreDirectory = true
+                                     };
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                try
+                Stream imageStream;
+                using (imageStream = openFileDialog.OpenFile())
                 {
-                    if ((imageStream = openFileDialog.OpenFile()) != null)
-                    {
-                        using (imageStream)
-                        {
-                            var pic = new Bitmap(imageStream);
-                            greyPoctureBox.Image = TransferToBlackAndWhite(pic);
-                            greyPoctureBox.Width = pic.Width;
-                            greyPoctureBox.Height = pic.Height;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                    var pic = new Bitmap(imageStream);
+                    resultPictureBox.Image = Filter.TransferToBlackAndWhite(pic);     
+
+                    //resultPictureBox.Image = Filter.Convultion(pic, this._kernel);
+                    this.Width = resultPictureBox.Width = pic.Width;
+                    this.Height = resultPictureBox.Height = pic.Height;
                 }
             }
         }
-
-        private Bitmap TransferToBlackAndWhite(Bitmap sourceImage)
-        {
-            var greyImage = new Bitmap(sourceImage.Width, sourceImage.Height);
-            for (var y = 0; y < sourceImage.Height; ++y)
-            {
-                for (var x = 0; x < sourceImage.Width; ++x)
-                {
-                    Color c = sourceImage.GetPixel(x, y);
-                    var rgb = (byte)(0.3 * c.R + 0.59 * c.G + 0.11 * c.B);
-                    greyImage.SetPixel(x, y, Color.FromArgb(c.A, rgb, rgb, rgb));
-                }
-            }
-
-            return greyImage;
-        } 
     }
 }

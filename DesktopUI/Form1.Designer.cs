@@ -31,9 +31,9 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.greyPoctureBox = new System.Windows.Forms.PictureBox();
+            this.resultPictureBox = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.greyPoctureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.resultPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -57,31 +57,32 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
-            // greyPoctureBox
+            // resultPictureBox
             // 
-            this.greyPoctureBox.Location = new System.Drawing.Point(12, 27);
-            this.greyPoctureBox.Name = "greyPoctureBox";
-            this.greyPoctureBox.Size = new System.Drawing.Size(870, 346);
-            this.greyPoctureBox.TabIndex = 1;
-            this.greyPoctureBox.TabStop = false;
+            this.resultPictureBox.Location = new System.Drawing.Point(12, 27);
+            this.resultPictureBox.Name = "resultPictureBox";
+            this.resultPictureBox.Size = new System.Drawing.Size(870, 346);
+            this.resultPictureBox.TabIndex = 1;
+            this.resultPictureBox.TabStop = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(963, 457);
-            this.Controls.Add(this.greyPoctureBox);
+            this.Controls.Add(this.resultPictureBox);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.greyPoctureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.resultPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -92,7 +93,7 @@
     private System.Windows.Forms.MenuStrip menuStrip1;
     private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-    private System.Windows.Forms.PictureBox greyPoctureBox;
+    private System.Windows.Forms.PictureBox resultPictureBox;
   }
 }
 
