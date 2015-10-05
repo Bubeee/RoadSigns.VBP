@@ -32,8 +32,12 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resultPictureBox = new System.Windows.Forms.PictureBox();
+            this.thresholdInput = new System.Windows.Forms.TextBox();
+            this.sourcePictureBox = new System.Windows.Forms.PictureBox();
+            this.calculateButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sourcePictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -42,7 +46,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(963, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1117, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -59,23 +63,52 @@
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
             // 
             // resultPictureBox
             // 
-            this.resultPictureBox.Location = new System.Drawing.Point(12, 27);
+            this.resultPictureBox.Location = new System.Drawing.Point(258, 27);
             this.resultPictureBox.Name = "resultPictureBox";
-            this.resultPictureBox.Size = new System.Drawing.Size(870, 346);
-            this.resultPictureBox.TabIndex = 1;
+            this.resultPictureBox.Size = new System.Drawing.Size(864, 717);
+            this.resultPictureBox.TabIndex = 2;
             this.resultPictureBox.TabStop = false;
+            // 
+            // thresholdInput
+            // 
+            this.thresholdInput.Location = new System.Drawing.Point(24, 332);
+            this.thresholdInput.Name = "thresholdInput";
+            this.thresholdInput.Size = new System.Drawing.Size(100, 20);
+            this.thresholdInput.TabIndex = 3;
+            this.thresholdInput.Text = "150";
+            // 
+            // sourcePictureBox
+            // 
+            this.sourcePictureBox.Location = new System.Drawing.Point(12, 27);
+            this.sourcePictureBox.Name = "sourcePictureBox";
+            this.sourcePictureBox.Size = new System.Drawing.Size(213, 249);
+            this.sourcePictureBox.TabIndex = 1;
+            this.sourcePictureBox.TabStop = false;
+            // 
+            // calculateButton
+            // 
+            this.calculateButton.Location = new System.Drawing.Point(24, 358);
+            this.calculateButton.Name = "calculateButton";
+            this.calculateButton.Size = new System.Drawing.Size(100, 23);
+            this.calculateButton.TabIndex = 4;
+            this.calculateButton.Text = "Calculate";
+            this.calculateButton.UseVisualStyleBackColor = true;
+            this.calculateButton.Click += new System.EventHandler(this.CalculateButtonClick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(963, 457);
+            this.ClientSize = new System.Drawing.Size(1134, 579);
+            this.Controls.Add(this.calculateButton);
+            this.Controls.Add(this.thresholdInput);
             this.Controls.Add(this.resultPictureBox);
+            this.Controls.Add(this.sourcePictureBox);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -83,6 +116,7 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sourcePictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -94,6 +128,9 @@
     private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
     private System.Windows.Forms.PictureBox resultPictureBox;
+    private System.Windows.Forms.TextBox thresholdInput;
+    private System.Windows.Forms.PictureBox sourcePictureBox;
+    private System.Windows.Forms.Button calculateButton;
   }
 }
 

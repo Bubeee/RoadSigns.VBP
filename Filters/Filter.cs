@@ -1,79 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Filters
 {
     public static class Filter
     {
-        public static Bitmap Convultion(Bitmap source, double[,] kernel)
-        {
-            //Получаем байты изображения
-            byte[] inputBytes = GetBytes(source);
-            byte[] outputBytes = new byte[inputBytes.Length];
-
-            int width = source.Width;
-            int height = source.Height;
-
-            int kernelWidth = kernel.GetLength(0);
-            int kernelHeight = kernel.GetLength(1);
-
-            //Производим вычисления
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    double rSum = 0, gSum = 0, bSum = 0, kSum = 0;
-
-                    for (int i = 0; i < kernelWidth; i++)
-                    {
-                        for (int j = 0; j < kernelHeight; j++)
-                        {
-                            int pixelPosX = x + (i - (kernelWidth / 2));
-                            int pixelPosY = y + (j - (kernelHeight / 2));
-                            if ((pixelPosX < 0) ||
-                              (pixelPosX >= width) ||
-                              (pixelPosY < 0) ||
-                              (pixelPosY >= height)) continue;
-
-                            byte r = inputBytes[3 * (width * pixelPosY + pixelPosX) + 0];
-                            byte g = inputBytes[3 * (width * pixelPosY + pixelPosX) + 1];
-                            byte b = inputBytes[3 * (width * pixelPosY + pixelPosX) + 2];
-
-                            double kernelVal = kernel[i, j];
-
-                            rSum += r * kernelVal;
-                            gSum += g * kernelVal;
-                            bSum += b * kernelVal;
-
-                            kSum += kernelVal;
-                        }
-                    }
-
-                    if (kSum <= 0) kSum = 1;
-
-                    //Контролируем переполнения переменных
-                    rSum /= kSum;
-                    if (rSum < 0) rSum = 0;
-                    if (rSum > 255) rSum = 255;
-
-                    gSum /= kSum;
-                    if (gSum < 0) gSum = 0;
-                    if (gSum > 255) gSum = 255;
-
-                    bSum /= kSum;
-                    if (bSum < 0) bSum = 0;
-                    if (bSum > 255) bSum = 255;
-
-                    //Записываем значения в результирующее изображение
-                    outputBytes[3 * (width * y + x) + 0] = (byte)rSum;
-                    outputBytes[3 * (width * y + x) + 1] = (byte)gSum;
-                    outputBytes[3 * (width * y + x) + 2] = (byte)bSum;
-                }
-            }
-            //Возвращаем отфильтрованное изображение
-            return BytesToBitmap(outputBytes, width, height);
-        }
-
         public static Bitmap TransferToBlackAndWhite(Bitmap sourceImage)
         {
             var greyImage = new Bitmap(sourceImage.Width, sourceImage.Height);
@@ -90,32 +20,101 @@ namespace Filters
             return greyImage;
         }
 
-        private static byte[] GetBytes(Bitmap bitmap)
+        public static Bitmap ApplySobelFilter(Bitmap source)
         {
-            var result = new List<byte>();
-            for (var i = 0; i < bitmap.Width; i++)
+            Bitmap b = source;
+            Bitmap bb = new Bitmap(source);
+            int width = b.Width;
+            int height = b.Height;
+            int[,] gx = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
+            int[,] gy = { { 1, 2, 1 }, { 0, 0, 0 }, { -1, -2, -1 } };
+
+            int[,] allPixR = new int[width, height];
+            int[,] allPixG = new int[width, height];
+            int[,] allPixB = new int[width, height];
+
+            const int Limit = 128 * 128;
+
+            for (int i = 0; i < width; i++)
             {
-                for (var j = 0; j < bitmap.Height; j++)
+                for (int j = 0; j < height; j++)
                 {
-                    result.Add(bitmap.GetPixel(i, j).R);
-                    result.Add(bitmap.GetPixel(i, j).G);
-                    result.Add(bitmap.GetPixel(i, j).B);
+                    allPixR[i, j] = b.GetPixel(i, j).R;
+                    allPixG[i, j] = b.GetPixel(i, j).G;
+                    allPixB[i, j] = b.GetPixel(i, j).B;
                 }
             }
 
-            return result.ToArray();
-        } 
-        
-        private static Bitmap BytesToBitmap(byte[] bytes, int width, int height)
-        {
-            var result = new Bitmap(width, height);
-            for (var x = 0; x < bytes.Length; x += 3)
+            int new_rx, new_ry;
+            int new_gx, new_gy;
+            int new_bx, new_by;
+            int rc, gc, bc;
+
+            for (int i = 1; i < b.Width - 1; i++)
             {
-                var y = x / width;
-                result.SetPixel(x % width, y % height, Color.FromArgb(255, bytes[x], bytes[x + 1], bytes[x + 2]));
+                for (int j = 1; j < b.Height - 1; j++)
+                {
+                    new_rx = 0;
+                    new_ry = 0;
+                    new_gx = 0;
+                    new_gy = 0;
+                    new_bx = 0;
+                    new_by = 0;
+
+                    for (int wi = -1; wi < 2; wi++)
+                    {
+                        for (int hw = -1; hw < 2; hw++)
+                        {
+                            rc = allPixR[i + hw, j + wi];
+                            new_rx += gx[wi + 1, hw + 1] * rc;
+                            new_ry += gy[wi + 1, hw + 1] * rc;
+
+                            gc = allPixG[i + hw, j + wi];
+                            new_gx += gx[wi + 1, hw + 1] * gc;
+                            new_gy += gy[wi + 1, hw + 1] * gc;
+
+                            bc = allPixB[i + hw, j + wi];
+                            new_bx += gx[wi + 1, hw + 1] * bc;
+                            new_by += gy[wi + 1, hw + 1] * bc;
+                        }
+                    }
+                    if (new_rx * new_rx + new_ry * new_ry > Limit 
+                        || new_gx * new_gx + new_gy * new_gy > Limit
+                        || new_bx * new_bx + new_by * new_by > Limit)
+                    {
+                        bb.SetPixel(i, j, Color.Black);
+                    }             //bb.SetPixel (i, j, Color.FromArgb(allPixR[i,j],allPixG[i,j],allPixB[i,j]));
+                    else
+                    {
+                        bb.SetPixel(i, j, Color.Transparent);
+                    }
+                }
+            }
+            return bb;
+        }
+
+        public static Bitmap BitmapToBlackWhite(Bitmap src, int treshold)
+        {
+            // 1.
+            //double treshold = 0.5;
+
+            Bitmap dst = new Bitmap(src.Width, src.Height);
+
+            for (int i = 0; i < src.Width; i++)
+            {
+                for (int j = 0; j < src.Height; j++)
+                {
+                    // 1.
+                    //dst.SetPixel(i, j, src.GetPixel(i, j).GetBrightness() < treshold ? Color.Black : Color.White);
+
+                     //2 
+                    Color color = src.GetPixel(i, j);
+                    int average = (color.R + color.B + color.G) / 3;
+                    dst.SetPixel(i, j, average < treshold ? System.Drawing.Color.Black : System.Drawing.Color.White);
+                }
             }
 
-            return result;
+            return dst;
         }
     }
 }

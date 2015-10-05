@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -9,14 +8,14 @@ namespace DesktopUI
 {
     public partial class Form1 : Form
     {
-        private readonly double[,] _kernel = { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0 } };
+        private Bitmap _currentImage;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void openToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void OpenToolStripMenuItemClick(object sender, System.EventArgs e)
         {
             var openFileDialog = new OpenFileDialog
                                      {
@@ -31,13 +30,22 @@ namespace DesktopUI
                 Stream imageStream;
                 using (imageStream = openFileDialog.OpenFile())
                 {
-                    var pic = new Bitmap(imageStream);
-                    resultPictureBox.Image = Filter.TransferToBlackAndWhite(pic);     
-
-                    //resultPictureBox.Image = Filter.Convultion(pic, this._kernel);
-                    this.Width = resultPictureBox.Width = pic.Width;
-                    this.Height = resultPictureBox.Height = pic.Height;
+                    this._currentImage = new Bitmap(imageStream);
+                    var miniature = new Bitmap(this._currentImage);
+                    miniature.SetResolution(0.001f, 0.001f);
+                    sourcePictureBox.Image = miniature;
                 }
+            }
+        }
+
+        private void CalculateButtonClick(object sender, System.EventArgs e)
+        {
+            int treshold;
+            if (int.TryParse(thresholdInput.Text, out treshold))
+            {
+                resultPictureBox.Image = Filter.ApplySobelFilter(Filter.BitmapToBlackWhite(this._currentImage, treshold));
+
+                //resultPictureBox.Image = (Filter.BitmapToBlackWhite(pic, treshold));
             }
         }
     }
