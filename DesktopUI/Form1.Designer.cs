@@ -1,6 +1,6 @@
 ﻿namespace DesktopUI
 {
-  partial class Form1
+  partial class ImageRecognitor
   {
     /// <summary>
     /// Required designer variable.
@@ -34,7 +34,6 @@
             this.resultPictureBox = new System.Windows.Forms.PictureBox();
             this.thresholdInput = new System.Windows.Forms.TextBox();
             this.sourcePictureBox = new System.Windows.Forms.PictureBox();
-            this.calculateButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sourcePictureBox)).BeginInit();
@@ -46,7 +45,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1117, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1323, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -67,52 +66,42 @@
             // 
             // resultPictureBox
             // 
-            this.resultPictureBox.Location = new System.Drawing.Point(258, 27);
+            this.resultPictureBox.Location = new System.Drawing.Point(337, 27);
             this.resultPictureBox.Name = "resultPictureBox";
-            this.resultPictureBox.Size = new System.Drawing.Size(864, 717);
+            this.resultPictureBox.Size = new System.Drawing.Size(948, 756);
             this.resultPictureBox.TabIndex = 2;
             this.resultPictureBox.TabStop = false;
             // 
             // thresholdInput
             // 
-            this.thresholdInput.Location = new System.Drawing.Point(24, 332);
+            this.thresholdInput.Location = new System.Drawing.Point(113, 302);
             this.thresholdInput.Name = "thresholdInput";
             this.thresholdInput.Size = new System.Drawing.Size(100, 20);
             this.thresholdInput.TabIndex = 3;
-            this.thresholdInput.Text = "150";
+            this.thresholdInput.Text = "50";
+            this.thresholdInput.TextChanged += new System.EventHandler(this.ThresholdInputTextChanged);
             // 
             // sourcePictureBox
             // 
             this.sourcePictureBox.Location = new System.Drawing.Point(12, 27);
             this.sourcePictureBox.Name = "sourcePictureBox";
-            this.sourcePictureBox.Size = new System.Drawing.Size(213, 249);
+            this.sourcePictureBox.Size = new System.Drawing.Size(303, 249);
             this.sourcePictureBox.TabIndex = 1;
             this.sourcePictureBox.TabStop = false;
             // 
-            // calculateButton
-            // 
-            this.calculateButton.Location = new System.Drawing.Point(24, 358);
-            this.calculateButton.Name = "calculateButton";
-            this.calculateButton.Size = new System.Drawing.Size(100, 23);
-            this.calculateButton.TabIndex = 4;
-            this.calculateButton.Text = "Calculate";
-            this.calculateButton.UseVisualStyleBackColor = true;
-            this.calculateButton.Click += new System.EventHandler(this.CalculateButtonClick);
-            // 
-            // Form1
+            // ImageRecognitor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1134, 579);
-            this.Controls.Add(this.calculateButton);
+            this.ClientSize = new System.Drawing.Size(1323, 833);
             this.Controls.Add(this.thresholdInput);
             this.Controls.Add(this.resultPictureBox);
             this.Controls.Add(this.sourcePictureBox);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "ImageRecognitor";
+            this.Text = "ImageRecognitor";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultPictureBox)).EndInit();
@@ -130,7 +119,6 @@
     private System.Windows.Forms.PictureBox resultPictureBox;
     private System.Windows.Forms.TextBox thresholdInput;
     private System.Windows.Forms.PictureBox sourcePictureBox;
-    private System.Windows.Forms.Button calculateButton;
   }
 }
 

@@ -1,10 +1,13 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Filters
 {
     public static class Filter
     {
-        public static Bitmap TransferToBlackAndWhite(Bitmap sourceImage)
+        // transfers image to 255 shades of grey =)
+        public static Bitmap TransferToGreyShades(Bitmap sourceImage)
         {
             var greyImage = new Bitmap(sourceImage.Width, sourceImage.Height);
             for (var y = 0; y < sourceImage.Height; ++y)
@@ -20,6 +23,7 @@ namespace Filters
             return greyImage;
         }
 
+        // changes the image applying Sobel' Filter (not really fast)
         public static Bitmap ApplySobelFilter(Bitmap source)
         {
             Bitmap b = source;
@@ -93,28 +97,72 @@ namespace Filters
             return bb;
         }
 
-        public static Bitmap BitmapToBlackWhite(Bitmap src, int treshold)
+        // transfers image to black and white with Single treshold method
+        public static Bitmap ToBlackWhite(Bitmap src, int treshold)
         {
-            // 1.
-            //double treshold = 0.5;
-
-            Bitmap dst = new Bitmap(src.Width, src.Height);
+            var dst = new Bitmap(src.Width, src.Height);
 
             for (int i = 0; i < src.Width; i++)
             {
                 for (int j = 0; j < src.Height; j++)
                 {
-                    // 1.
-                    //dst.SetPixel(i, j, src.GetPixel(i, j).GetBrightness() < treshold ? Color.Black : Color.White);
-
-                     //2 
                     Color color = src.GetPixel(i, j);
                     int average = (color.R + color.B + color.G) / 3;
-                    dst.SetPixel(i, j, average < treshold ? System.Drawing.Color.Black : System.Drawing.Color.White);
+                    dst.SetPixel(i, j, average < treshold ? Color.Black : Color.White);
                 }
             }
 
             return dst;
+        }
+        
+        // detects the edges with gradient method (fast!)
+        public static void GradientEdgeDetection(Bitmap sourceImage, float threshold)
+        {
+            Bitmap sourceImageClone = (Bitmap)sourceImage.Clone();
+
+            BitmapData bmData = sourceImage.LockBits(new Rectangle(0, 0, sourceImage.Width, sourceImage.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            BitmapData bmSrc = sourceImageClone.LockBits(new Rectangle(0, 0, sourceImageClone.Width, sourceImageClone.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+
+            int stride = bmData.Stride;
+
+            unsafe
+            {
+                byte* pointerDest = (byte*)(void*)bmData.Scan0;
+                byte* pointerSrc = (byte*)(void*)bmSrc.Scan0;
+
+                int nOffset = stride - sourceImage.Width * 3;
+                int nWidth = sourceImage.Width - 1;
+                int nHeight = sourceImage.Height - 1;
+
+                for (var y = 0; y < nHeight; ++y)
+                {
+                    for (var x = 0; x < nWidth; ++x)
+                    {
+                        var p0 = ToGray(pointerSrc);
+                        var p1 = ToGray(pointerSrc + 3);
+                        var p2 = ToGray(pointerSrc + 3 + stride);
+
+                        if (Math.Abs(p1 - p2) + Math.Abs(p1 - p0) > threshold)
+                            pointerDest[0] = pointerDest[1] = pointerDest[2] = 255;
+                        else
+                            pointerDest[0] = pointerDest[1] = pointerDest[2] = 0;
+
+                        pointerDest += 3;
+                        pointerSrc += 3;
+                    }
+                    pointerDest += nOffset;
+                    pointerSrc += nOffset;
+                }
+            }
+
+            sourceImage.UnlockBits(bmData);
+            sourceImageClone.UnlockBits(bmSrc);
+        }
+
+        // transfers single pixel tp gray color
+        private static unsafe float ToGray(byte* bgr)
+        {
+            return bgr[2] * 0.3f + bgr[1] * 0.59f + bgr[0] * 0.11f;
         }
     }
 }
