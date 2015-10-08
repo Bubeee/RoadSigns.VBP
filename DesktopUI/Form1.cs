@@ -42,10 +42,8 @@ namespace DesktopUI
                     sourcePictureBox.Image = miniature;
                 }
             }
-
-            ThresholdInputTextChanged(sender, e);
         }
-        
+
         private void ThresholdInputTextChanged(object sender, System.EventArgs e)
         {
             int treshold;
@@ -54,10 +52,20 @@ namespace DesktopUI
                 //resultPictureBox.Image = Filter.ApplySobelFilter(Filter.BitmapToBlackWhite(this._currentImage, treshold)); 
                 //resultPictureBox.Image = Filter.ApplySobelFilter(_currentImage); 
 
-                var img = new Bitmap(this._currentImage);
-                Filter.GradientEdgeDetection(img, treshold);
-                resultPictureBox.Image = img;
+                //var img = new Bitmap(this._currentImage);
+                //Filter.GradientEdgeDetection(img, treshold);
+                //resultPictureBox.Image = img;
             }
+        }
+        
+        private void haussToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            resultPictureBox.Image = this._currentImage.ConvolutionFilter(GaussianFilter.CalculateMatrix(3, 9.25));
+        }
+
+        private void button1_Click(object sender, System.EventArgs e)
+        {
+            resultPictureBox.Image = this._currentImage.ToBlackWhite();
         }
     }
 }

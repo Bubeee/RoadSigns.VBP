@@ -34,6 +34,10 @@
             this.resultPictureBox = new System.Windows.Forms.PictureBox();
             this.thresholdInput = new System.Windows.Forms.TextBox();
             this.sourcePictureBox = new System.Windows.Forms.PictureBox();
+            this.filterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.haussToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.medianToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sourcePictureBox)).BeginInit();
@@ -42,10 +46,11 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.filterToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1323, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1306, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -74,7 +79,7 @@
             // 
             // thresholdInput
             // 
-            this.thresholdInput.Location = new System.Drawing.Point(113, 302);
+            this.thresholdInput.Location = new System.Drawing.Point(109, 291);
             this.thresholdInput.Name = "thresholdInput";
             this.thresholdInput.Size = new System.Drawing.Size(100, 20);
             this.thresholdInput.TabIndex = 3;
@@ -89,12 +94,45 @@
             this.sourcePictureBox.TabIndex = 1;
             this.sourcePictureBox.TabStop = false;
             // 
+            // filterToolStripMenuItem
+            // 
+            this.filterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.haussToolStripMenuItem,
+            this.medianToolStripMenuItem});
+            this.filterToolStripMenuItem.Name = "filterToolStripMenuItem";
+            this.filterToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
+            this.filterToolStripMenuItem.Text = "Filter";
+            // 
+            // haussToolStripMenuItem
+            // 
+            this.haussToolStripMenuItem.Name = "haussToolStripMenuItem";
+            this.haussToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.haussToolStripMenuItem.Text = "Gaussian";
+            this.haussToolStripMenuItem.Click += new System.EventHandler(this.haussToolStripMenuItem_Click);
+            // 
+            // medianToolStripMenuItem
+            // 
+            this.medianToolStripMenuItem.Name = "medianToolStripMenuItem";
+            this.medianToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.medianToolStripMenuItem.Text = "Median";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(85, 347);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ImageRecognitor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1323, 833);
+            this.ClientSize = new System.Drawing.Size(1323, 741);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.thresholdInput);
             this.Controls.Add(this.resultPictureBox);
             this.Controls.Add(this.sourcePictureBox);
@@ -119,6 +157,10 @@
     private System.Windows.Forms.PictureBox resultPictureBox;
     private System.Windows.Forms.TextBox thresholdInput;
     private System.Windows.Forms.PictureBox sourcePictureBox;
+    private System.Windows.Forms.ToolStripMenuItem filterToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem haussToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem medianToolStripMenuItem;
+    private System.Windows.Forms.Button button1;
   }
 }
 
