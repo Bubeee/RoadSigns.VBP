@@ -49,15 +49,28 @@ namespace Filters
             
             int numPixels = bmpData.Stride * bmp.Height;
             byte[] pixels = new byte[numPixels];
-            byte[] histogram = new byte[256];
 
             Marshal.Copy(bmpData.Scan0, pixels, 0, numPixels);
 
-            for (int counter = 0; counter < pixels.Length; counter += 3)
+            //for (int counter = 0; counter < pixels.Length; counter += 3)
+            //{
+            //    int h = 0xFF & pixels[counter];
+            //    histogram[h]++;
+            //}
+
+            int min = pixels[0], max = pixels[0];
+            int temp;
+            for (int i = 0; i < pixels.Length; i += 3)
             {
-                int h = 0xFF & pixels[counter];
-                histogram[h]++;
+                temp = pixels[i];
+                if (temp < min) min = temp;
+                if (temp > max) max = temp;
             }
+
+            byte[] histogram = new byte[max - min + 1];
+            
+            for (int i = 0; i < pixels.Length; i+=3)
+                histogram[pixels[i] - min]++;
 
             float sum = 0;
             for (int t = 0; t < 256; t++) sum += t * histogram[t];
