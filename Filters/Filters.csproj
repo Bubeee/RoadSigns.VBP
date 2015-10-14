@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Classifier.cs" />
     <Compile Include="Filter.cs" />
+    <Compile Include="FilterMatrix.cs" />
     <Compile Include="GaussianFilter.cs" />
     <Compile Include="OtsuBinarizator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
