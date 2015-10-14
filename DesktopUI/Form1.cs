@@ -68,18 +68,20 @@ namespace DesktopUI
         {
             //resultPictureBox.Image = this._currentImage.ToBlackWhite();
 
-            //this._currentImage = (Bitmap)Bitmap.FromFile(@"D:\my_programs\9_sem\MISOI\MISOI\MISOI\bin\Debug\pic.bmp");
-            //sourcePictureBox.Image = this._currentImage;
+            this._currentImage = (Bitmap)Bitmap.FromFile(@"D:\my_programs\9_sem\MISOI\MISOI\MISOI\bin\Debug\pic.bmp");
+            sourcePictureBox.Image = this._currentImage;
 
             var processedPicture = FilterMatrix.GetMatrixBrightness(this._currentImage);
 
-            if (GausCheckBox.Checked)
+            if (gausCheckBox.Checked)
             {
                 // нужно подставить правильную матрицу и будет ок
                 var filter = new double[][]{                         
-                            new double []{-0.1,-0.1,-0.1},
-                            new double []{-0.1,0,1.8,-0.1},
-                            new double []{-0.1,-0.1,-0.1}
+                            new double []{0.000789,0.006581,0.013347,0.006581,0.000789},
+                            new double []{0.006581,0.54901,0.111345,0.54901,0.006581},
+                            new double []{0.013347,0.111345,0.225821,0.111345,0.013347},
+                            new double []{0.006581,0.54901,0.111345,0.54901,0.006581},
+                            new double []{0.000789,0.006581,0.013347,0.006581,0.000789},
                          };
                 processedPicture = FilterMatrix.ApplyFilter(processedPicture, filter);
             }
@@ -89,9 +91,26 @@ namespace DesktopUI
                 processedPicture = FilterMatrix.ApplyMediane(processedPicture, Convert.ToInt32(medianNumeric.Value));
             }
 
+            if (clarityСheckBox.Checked)
+            {
+                // нужно подставить правильную матрицу и будет ок
+                var filter = new double[][]{                         
+                            new double []{-1,-1,-1},
+                            new double []{-1,9,-1},
+                            new double []{-1,-1,-1}
+                         };
+                processedPicture = FilterMatrix.ApplyFilter(processedPicture, filter);
+            }
+
             if (SobelCheckBox.Checked)
             {
                 processedPicture = FilterMatrix.ApplySobel(processedPicture);
+            }
+
+            if (BinarizeCheckBox.Checked)
+            {
+                float threshold = (float)binarizeNumericUpDown.Value;
+                processedPicture = FilterMatrix.ApplyBinarize(processedPicture, threshold);
             }
 
             resultPictureBox.Image = FilterMatrix.GetBmp(processedPicture);

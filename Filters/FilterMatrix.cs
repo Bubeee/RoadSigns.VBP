@@ -82,7 +82,7 @@ namespace Filters
                             new double []{1,2,1}
                          };
 
-            double[][] xGradientMatrix = ApplyFilter(matrix,xFilter);
+            double[][] xGradientMatrix = ApplyFilter(matrix, xFilter);
             double[][] yGradientMatrix = ApplyFilter(matrix, yFilter);
             double[][] result = new double[width][];
 
@@ -91,11 +91,39 @@ namespace Filters
                 result[i] = new double[height];
             }
 
-            for (int i = 0; i < width;i++ )
+            for (int i = 0; i < width; i++)
             {
-                for(int j =0;j<height;j++)
+                for (int j = 0; j < height; j++)
                 {
                     result[i][j] = Math.Sqrt(xGradientMatrix[i][j] * xGradientMatrix[i][j] + yGradientMatrix[i][j] * yGradientMatrix[i][j]);
+                }
+            }
+            return result;
+        }
+        public static double[][] ApplyBinarize(double[][] matrix, float threshold)
+        {
+            var width = matrix.Length;
+            var height = matrix[0].Length;
+
+            double[][] result = new double[width][];
+
+            for (int i = 0; i < width; i++)
+            {
+                result[i] = new double[height];
+            }
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    if (matrix[i][j] > threshold)
+                    {
+                        result[i][j] = 255;
+                    }
+                    else
+                    {
+                        result[i][j] = 0;
+                    }
                 }
             }
             return result;

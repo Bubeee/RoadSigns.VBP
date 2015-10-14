@@ -39,13 +39,17 @@
             this.sourcePictureBox = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.SobelCheckBox = new System.Windows.Forms.CheckBox();
-            this.GausCheckBox = new System.Windows.Forms.CheckBox();
+            this.gausCheckBox = new System.Windows.Forms.CheckBox();
             this.medianCheckBox = new System.Windows.Forms.CheckBox();
             this.medianNumeric = new System.Windows.Forms.NumericUpDown();
+            this.clarityСheckBox = new System.Windows.Forms.CheckBox();
+            this.BinarizeCheckBox = new System.Windows.Forms.CheckBox();
+            this.binarizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sourcePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.medianNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.binarizeNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -108,12 +112,13 @@
             // 
             // thresholdInput
             // 
-            this.thresholdInput.Location = new System.Drawing.Point(235, 568);
+            this.thresholdInput.Location = new System.Drawing.Point(214, 559);
             this.thresholdInput.Margin = new System.Windows.Forms.Padding(4);
             this.thresholdInput.Name = "thresholdInput";
             this.thresholdInput.Size = new System.Drawing.Size(132, 22);
             this.thresholdInput.TabIndex = 3;
             this.thresholdInput.Text = "50";
+            this.thresholdInput.Visible = false;
             this.thresholdInput.TextChanged += new System.EventHandler(this.ThresholdInputTextChanged);
             // 
             // sourcePictureBox
@@ -139,23 +144,22 @@
             // SobelCheckBox
             // 
             this.SobelCheckBox.AutoSize = true;
-            this.SobelCheckBox.Location = new System.Drawing.Point(48, 429);
+            this.SobelCheckBox.Location = new System.Drawing.Point(48, 456);
             this.SobelCheckBox.Name = "SobelCheckBox";
             this.SobelCheckBox.Size = new System.Drawing.Size(78, 21);
             this.SobelCheckBox.TabIndex = 5;
             this.SobelCheckBox.Text = "Собель";
             this.SobelCheckBox.UseVisualStyleBackColor = true;
             // 
-            // GausCheckBox
+            // gausCheckBox
             // 
-            this.GausCheckBox.AutoSize = true;
-            this.GausCheckBox.Enabled = false;
-            this.GausCheckBox.Location = new System.Drawing.Point(48, 375);
-            this.GausCheckBox.Name = "GausCheckBox";
-            this.GausCheckBox.Size = new System.Drawing.Size(145, 21);
-            this.GausCheckBox.TabIndex = 6;
-            this.GausCheckBox.Text = "Размытие Гаусса";
-            this.GausCheckBox.UseVisualStyleBackColor = true;
+            this.gausCheckBox.AutoSize = true;
+            this.gausCheckBox.Location = new System.Drawing.Point(48, 375);
+            this.gausCheckBox.Name = "gausCheckBox";
+            this.gausCheckBox.Size = new System.Drawing.Size(145, 21);
+            this.gausCheckBox.TabIndex = 6;
+            this.gausCheckBox.Text = "Размытие Гаусса";
+            this.gausCheckBox.UseVisualStyleBackColor = true;
             // 
             // medianCheckBox
             // 
@@ -169,7 +173,7 @@
             // 
             // medianNumeric
             // 
-            this.medianNumeric.Location = new System.Drawing.Point(168, 401);
+            this.medianNumeric.Location = new System.Drawing.Point(202, 401);
             this.medianNumeric.Maximum = new decimal(new int[] {
             11,
             0,
@@ -189,15 +193,55 @@
             0,
             0});
             // 
+            // clarityСheckBox
+            // 
+            this.clarityСheckBox.AutoSize = true;
+            this.clarityСheckBox.Location = new System.Drawing.Point(48, 429);
+            this.clarityСheckBox.Name = "clarityСheckBox";
+            this.clarityСheckBox.Size = new System.Drawing.Size(91, 21);
+            this.clarityСheckBox.TabIndex = 9;
+            this.clarityСheckBox.Text = "Четкость";
+            this.clarityСheckBox.UseVisualStyleBackColor = true;
+            // 
+            // BinarizeCheckBox
+            // 
+            this.BinarizeCheckBox.AutoSize = true;
+            this.BinarizeCheckBox.Location = new System.Drawing.Point(48, 483);
+            this.BinarizeCheckBox.Name = "BinarizeCheckBox";
+            this.BinarizeCheckBox.Size = new System.Drawing.Size(118, 21);
+            this.BinarizeCheckBox.TabIndex = 10;
+            this.BinarizeCheckBox.Text = "Бинаризация";
+            this.BinarizeCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // binarizeNumericUpDown
+            // 
+            this.binarizeNumericUpDown.Location = new System.Drawing.Point(202, 482);
+            this.binarizeNumericUpDown.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.binarizeNumericUpDown.Name = "binarizeNumericUpDown";
+            this.binarizeNumericUpDown.Size = new System.Drawing.Size(120, 22);
+            this.binarizeNumericUpDown.TabIndex = 11;
+            this.binarizeNumericUpDown.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
             // ImageRecognitor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1764, 912);
+            this.Controls.Add(this.binarizeNumericUpDown);
+            this.Controls.Add(this.BinarizeCheckBox);
+            this.Controls.Add(this.clarityСheckBox);
             this.Controls.Add(this.medianNumeric);
             this.Controls.Add(this.medianCheckBox);
-            this.Controls.Add(this.GausCheckBox);
+            this.Controls.Add(this.gausCheckBox);
             this.Controls.Add(this.SobelCheckBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.thresholdInput);
@@ -213,6 +257,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.resultPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sourcePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.medianNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.binarizeNumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -231,9 +276,12 @@
     private System.Windows.Forms.ToolStripMenuItem medianToolStripMenuItem;
     private System.Windows.Forms.Button button1;
     private System.Windows.Forms.CheckBox SobelCheckBox;
-    private System.Windows.Forms.CheckBox GausCheckBox;
+    private System.Windows.Forms.CheckBox gausCheckBox;
     private System.Windows.Forms.CheckBox medianCheckBox;
     private System.Windows.Forms.NumericUpDown medianNumeric;
+    private System.Windows.Forms.CheckBox clarityСheckBox;
+    private System.Windows.Forms.CheckBox BinarizeCheckBox;
+    private System.Windows.Forms.NumericUpDown binarizeNumericUpDown;
   }
 }
 
