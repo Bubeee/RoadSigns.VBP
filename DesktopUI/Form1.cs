@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using Filters;
+using System;
 
 namespace DesktopUI
 {
@@ -65,7 +66,35 @@ namespace DesktopUI
 
         private void button1_Click(object sender, System.EventArgs e)
         {
-            resultPictureBox.Image = this._currentImage.ToBlackWhite();
+            //resultPictureBox.Image = this._currentImage.ToBlackWhite();
+
+            //this._currentImage = (Bitmap)Bitmap.FromFile(@"D:\my_programs\9_sem\MISOI\MISOI\MISOI\bin\Debug\pic.bmp");
+            //sourcePictureBox.Image = this._currentImage;
+
+            var processedPicture = FilterMatrix.GetMatrixBrightness(this._currentImage);
+
+            if (GausCheckBox.Checked)
+            {
+                // нужно подставить правильную матрицу и будет ок
+                var filter = new double[][]{                         
+                            new double []{-0.1,-0.1,-0.1},
+                            new double []{-0.1,0,1.8,-0.1},
+                            new double []{-0.1,-0.1,-0.1}
+                         };
+                processedPicture = FilterMatrix.ApplyFilter(processedPicture, filter);
+            }
+
+            if (medianCheckBox.Checked)
+            {
+                processedPicture = FilterMatrix.ApplyMediane(processedPicture, Convert.ToInt32(medianNumeric.Value));
+            }
+
+            if (SobelCheckBox.Checked)
+            {
+                processedPicture = FilterMatrix.ApplySobel(processedPicture);
+            }
+
+            resultPictureBox.Image = FilterMatrix.GetBmp(processedPicture);
         }
     }
 }

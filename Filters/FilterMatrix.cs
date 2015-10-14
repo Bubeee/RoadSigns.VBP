@@ -22,7 +22,7 @@ namespace Filters
                 result[i] = new double[bmp.Height];
                 for (int j = 0; j < bmp.Height; j++)
                 {
-                    result[i][j] = bmp.GetPixel(i, j).GetBrightness();
+                    result[i][j] = bmp.GetPixel(i, j).GetBrightness() * 255;
                 }
             }
             return result;
@@ -60,6 +60,42 @@ namespace Filters
                         }
                     }
                     result[x - pixelWide][y - pixelWide] = pixelResult;
+                }
+            }
+            return result;
+        }
+
+        public static double[][] ApplySobel(double[][] matrix)
+        {
+            var width = matrix.Length;
+            var height = matrix[0].Length;
+
+            var xFilter = new double[][]{                         
+                            new double []{-1,0,1},
+                            new double []{-2,0,2},
+                            new double []{-1,0,1}
+                         };
+
+            var yFilter = new double[][]{                         
+                            new double []{-1,-2,-1},
+                            new double []{0,0,0},
+                            new double []{1,2,1}
+                         };
+
+            double[][] xGradientMatrix = ApplyFilter(matrix,xFilter);
+            double[][] yGradientMatrix = ApplyFilter(matrix, yFilter);
+            double[][] result = new double[width][];
+
+            for (int i = 0; i < width; i++)
+            {
+                result[i] = new double[height];
+            }
+
+            for (int i = 0; i < width;i++ )
+            {
+                for(int j =0;j<height;j++)
+                {
+                    result[i][j] = Math.Sqrt(xGradientMatrix[i][j] * xGradientMatrix[i][j] + yGradientMatrix[i][j] * yGradientMatrix[i][j]);
                 }
             }
             return result;
@@ -136,7 +172,7 @@ namespace Filters
             {
                 for (int j = 0; j < matrix[0].Length; j++)
                 {
-                    byte brightnessByte = (byte)matrix[i][j];
+                    byte brightnessByte = (byte)( matrix[i][j]);
                     result.SetPixel(i, j, Color.FromArgb(brightnessByte, brightnessByte, brightnessByte));
                 }
             }
