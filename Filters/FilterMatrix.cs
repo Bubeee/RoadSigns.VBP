@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Filters
 {
@@ -196,14 +197,27 @@ namespace Filters
         {
             Bitmap result = new Bitmap(matrix.Length, matrix[0].Length);
 
+            List<double> a = new List<double>();
             for (int i = 0; i < matrix.Length; i++)
             {
+                a.Add(matrix[i].Max());
                 for (int j = 0; j < matrix[0].Length; j++)
                 {
-                    byte brightnessByte = (byte)( matrix[i][j]);
+                    
+                    int brightnessByte = (int)(matrix[i][j]);
+                    if (brightnessByte > 255)
+                    {
+                        brightnessByte = 255;
+                    } 
+                    if (brightnessByte < 0)
+                    {
+                        brightnessByte = 0;
+                    }
+                    
                     result.SetPixel(i, j, Color.FromArgb(brightnessByte, brightnessByte, brightnessByte));
                 }
             }
+            //MessageBox.Show(a.Max().ToString());
             return result;
         }
 

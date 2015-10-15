@@ -78,9 +78,9 @@ namespace DesktopUI
                 // нужно подставить правильную матрицу и будет ок
                 var filter = new double[][]{                         
                             new double []{0.000789,0.006581,0.013347,0.006581,0.000789},
-                            new double []{0.006581,0.54901,0.111345,0.54901,0.006581},
+                            new double []{0.006581,0.054901,0.111345,0.054901,0.006581},
                             new double []{0.013347,0.111345,0.225821,0.111345,0.013347},
-                            new double []{0.006581,0.54901,0.111345,0.54901,0.006581},
+                            new double []{0.006581,0.054901,0.111345,0.054901,0.006581},
                             new double []{0.000789,0.006581,0.013347,0.006581,0.000789},
                          };
                 processedPicture = FilterMatrix.ApplyFilter(processedPicture, filter);
@@ -98,7 +98,7 @@ namespace DesktopUI
                             new double []{-1,-1,-1},
                             new double []{-1,9,-1},
                             new double []{-1,-1,-1}
-                         };
+                         }; 
                 processedPicture = FilterMatrix.ApplyFilter(processedPicture, filter);
             }
 
