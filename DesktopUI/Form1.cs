@@ -68,7 +68,7 @@ namespace DesktopUI
         {
             //resultPictureBox.Image = this._currentImage.ToBlackWhite();
 
-            this._currentImage = (Bitmap)Bitmap.FromFile(@"D:\my_programs\9_sem\MISOI\MISOI\MISOI\bin\Debug\pic.bmp");
+            //this._currentImage = (Bitmap)Bitmap.FromFile(@"D:\my_programs\9_sem\MISOI\MISOI\MISOI\bin\Debug\pic.bmp");
             sourcePictureBox.Image = this._currentImage;
 
             var processedPicture = FilterMatrix.GetMatrixBrightness(this._currentImage);
