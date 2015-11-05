@@ -10,6 +10,7 @@ namespace Filters
 {
     public static class FilterMatrix
     {
+        
         /// <summary>
         /// В получившейся матрице для получения яркости обращаться [x][y], т.е. х - ширина, y - высота
         /// </summary>
@@ -129,6 +130,42 @@ namespace Filters
             }
             return result;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="savePercent">In percents from 0 to 100</param>
+        /// <returns></returns>
+        public static double[][] ApplyAdaptiveBinarize(double[][] matrix, double savePercent)
+        {
+            if ((savePercent < 0) || (savePercent > 100))
+                throw new ArgumentException("savePercent in percents from 0 to 100");
+
+            var width = matrix.Length;
+            var height = matrix[0].Length;
+
+            var allCount = width * height;
+
+            int saveCount = Convert.ToInt32(savePercent / 100 * allCount);
+
+            var points = new List<double>(width * height);
+            
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    points.Add(matrix[i][j]);
+                }
+            }
+
+            points.Sort();
+            var threshold = points[saveCount];
+
+            return ApplyBinarize(matrix, (float)threshold);
+        }
+
 
         private static double[][] TurnFilter(double[][] filter)
         {

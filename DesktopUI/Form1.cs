@@ -107,11 +107,19 @@ namespace DesktopUI
                 processedPicture = FilterMatrix.ApplySobel(processedPicture);
             }
 
+            //if (BinarizeCheckBox.Checked)
+            //{
+            //    float threshold = (float)binarizeNumericUpDown.Value;
+            //    processedPicture = FilterMatrix.ApplyBinarize(processedPicture, threshold);
+            //}
+
             if (BinarizeCheckBox.Checked)
             {
                 float threshold = (float)binarizeNumericUpDown.Value;
-                processedPicture = FilterMatrix.ApplyBinarize(processedPicture, threshold);
+                processedPicture = FilterMatrix.ApplyAdaptiveBinarize(processedPicture, threshold);
             }
+
+            
 
             resultPictureBox.Image = FilterMatrix.GetBmp(processedPicture);
         }
