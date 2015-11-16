@@ -1,9 +1,17 @@
 ﻿using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-
+using SurfaceHandling;
 using Filters;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
+using SurfaceHandling.Draw;
+using SurfaceHandling.Info;
+using Point = SurfaceHandling.Point;
 
 namespace DesktopUI
 {
@@ -64,6 +72,7 @@ namespace DesktopUI
             resultPictureBox.Image = this._currentImage.ConvolutionFilter(GaussianFilter.CalculateMatrix(3, 9.25));
         }
 
+
         private void button1_Click(object sender, System.EventArgs e)
         {
             //resultPictureBox.Image = this._currentImage.ToBlackWhite();
@@ -114,6 +123,204 @@ namespace DesktopUI
             }
 
             resultPictureBox.Image = FilterMatrix.GetBmp(processedPicture);
+        }
+
+        private ImgInfo _info;
+        private Dictionary<int, PixelClass> _classes;
+        private Bitmap _myMap;
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var processedPicture = FilterMatrix.GetMatrixBrightness(_currentImage);
+            processedPicture = FilterMatrix.ApplyBinarize(processedPicture, 125);
+            
+            int ni = processedPicture.Length;
+            int nj = processedPicture[0].Length;
+            int[,] processedPictureInt = new int[ni,nj];
+            for (int i = 0; i< processedPicture.Length; i++  )
+            {
+                for(int j = 0; j< nj; j++)
+                {
+                    processedPictureInt[i,j] = (int)processedPicture[i][j];
+                }
+            }
+            var labeler = new SurfaceLabeler();
+   
+            Task<ImgInfo>.Factory.StartNew(() => labeler.Labeling(processedPictureInt, _currentImage)).ContinueWith(x =>
+            {
+                _info = x.Result;
+                resultPictureBox.Image = x.Result.NewPicture;
+                _myMap = x.Result.NewPicture;
+
+            },  
+            TaskScheduler.FromCurrentSynchronizationContext());           
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+                Labeling(125);
+        }
+
+
+
+
+        public void LabelingForce(int bin)
+        {
+            
+            var labeler = new SurfaceLabeler(255);
+
+            var listinf = new List<ImgInfo>();
+
+            Task<List<ImgInfo>>.Factory.StartNew(
+                () =>
+                {
+                    var result = new List<ImgInfo>();
+                    for (int i = 100; i < 200; i += 10) 
+                       result.Add(labeler.Labeling(Binar(i), _currentImage));
+                    return result;
+                }
+                ).ContinueWith(x =>
+            {
+                _info = x.Result.OrderByDescending(y=>y.Classes.Values.Count()).First();
+
+
+
+
+                _myMap =_info.NewPicture;
+            },
+            TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+
+        public int[,] Binar(int bin)
+        {
+            var processedPicture = FilterMatrix.GetMatrixBrightness(_currentImage);
+            processedPicture = FilterMatrix.ApplyBinarize(processedPicture, bin);
+
+            int ni = processedPicture.Length;
+            int nj = processedPicture[0].Length;
+            int[,] processedPictureInt = new int[ni, nj];
+            for (int i = 0; i < processedPicture.Length; i++)
+            {
+                for (int j = 0; j < nj; j++)
+                {
+                    processedPictureInt[i, j] = (int)processedPicture[i][j];
+                }
+            }
+            return processedPictureInt;
+        }
+
+        public void Labeling(int bin)
+        {
+            var processedPicture = FilterMatrix.GetMatrixBrightness(_currentImage);
+            processedPicture = FilterMatrix.ApplyBinarize(processedPicture, bin);
+
+            int ni = processedPicture.Length;
+            int nj = processedPicture[0].Length;
+            int[,] processedPictureInt = new int[ni, nj];
+            for (int i = 0; i < processedPicture.Length; i++)
+            {
+                for (int j = 0; j < nj; j++)
+                {
+                    processedPictureInt[i, j] = (int)processedPicture[i][j];
+                }
+            }
+            var labeler = new SurfaceLabeler(255);
+
+            Task<ImgInfo>.Factory.StartNew(() => labeler.Labeling(processedPictureInt, _currentImage)).ContinueWith(x =>
+            {
+                _info = x.Result;
+                if (_info.OldPicture == _info.NewPicture || (_info.Classes.Values.Any() && _info.Classes.Values.Count<4 ))
+                {
+                    if (bin+5 <255)
+                       Labeling(bin + 5);
+                }
+                else 
+                {
+                    resultPictureBox.Image = x.Result.NewPicture;
+                }
+                _myMap = x.Result.NewPicture;
+            },
+            TaskScheduler.FromCurrentSynchronizationContext());   
+        }
+     
+      
+
+        public void GetLines(Dictionary<int, PixelClass> classes)
+        {
+            /**SurfaceLabeler labeler = new SurfaceLabeler();
+            foreach (var v in classes)
+            {
+                v.Value.LineList.Add(labeler.GetLineFunc(v.Value.Angles.Top, v.Value.Angles.Bottom));
+                v.Value.LineList.Add(labeler.GetLineFunc(v.Value.Angles.Bottom, v.Value.Angles.Right));
+                v.Value.LineList.Add(labeler.GetLineFunc(v.Value.Angles.Right, v.Value.Angles.Right));
+                v.Value.LineList.Add(labeler.GetLineFunc(v.Value.Angles.Bottom, v.Value.Angles.Right));
+                
+            }**/
+        }
+
+        public bool DrawLine(Bitmap bitmap, Line line)
+        {
+            var min = Math.Min(line.Right, bitmap.Width); 
+            for (int i = line.Left; i < min; i++)
+            {
+                var h = line.Func(i);
+                if (h < bitmap.Height && h >= 0)
+                    bitmap.SetPixel(i, line.Func(i), Color.Red);
+            }
+
+            return false;
+        }
+
+        private void resultPictureBox_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            
+            Draw.Noise(_currentImage);
+            resultPictureBox.Image = _currentImage;
+
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            float sum = 0;
+            for (int i = 1; i < _currentImage.Width; i++)
+            {
+                for (int j = 0; j < _currentImage.Height; j++)
+                {
+
+                   sum+= Math.Abs(_currentImage.GetPixel(i, j).GetBrightness() - _currentImage.GetPixel(i-1, j).GetBrightness());
+                }
+            }
+
+            if (sum > 30000)
+            {
+                var filter = new double[][]
+                {
+                    new double[] {0.000789, 0.006581, 0.013347, 0.006581, 0.000789},
+                    new double[] {0.006581, 0.054901, 0.111345, 0.054901, 0.006581},
+                    new double[] {0.013347, 0.111345, 0.225821, 0.111345, 0.013347},
+                    new double[] {0.006581, 0.054901, 0.111345, 0.054901, 0.006581},
+                    new double[] {0.000789, 0.006581, 0.013347, 0.006581, 0.000789},
+                };
+                var processedPicture = FilterMatrix.GetMatrixBrightness(this._currentImage);
+
+                processedPicture = FilterMatrix.ApplyFilter(processedPicture, filter);
+
+                _currentImage = FilterMatrix.GetBmp(processedPicture);
+            }
+           
+            resultPictureBox.Image = _currentImage;
+            
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            LabelingForce(100);
         }
     }
 }

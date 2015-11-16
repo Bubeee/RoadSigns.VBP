@@ -82,6 +82,10 @@
       <Project>{F50B4C5C-F7BF-41EB-ABA8-1A7C3DE0DDD6}</Project>
       <Name>Filters</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SurfaceHandling\SurfaceHandling.csproj">
+      <Project>{f661a2b0-4b3b-436f-ae6a-e29b7730704a}</Project>
+      <Name>SurfaceHandling</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
