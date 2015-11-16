@@ -53,19 +53,6 @@ namespace DesktopUI
             }
         }
 
-        private void ThresholdInputTextChanged(object sender, System.EventArgs e)
-        {
-            int treshold;
-            if (int.TryParse(thresholdInput.Text, out treshold))
-            {
-                //resultPictureBox.Image = Filter.ApplySobelFilter(Filter.BitmapToBlackWhite(this._currentImage, treshold)); 
-                //resultPictureBox.Image = Filter.ApplySobelFilter(_currentImage); 
-
-                //var img = new Bitmap(this._currentImage);
-                //Filter.GradientEdgeDetection(img, treshold);
-                //resultPictureBox.Image = img;
-            }
-        }
         
         private void haussToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
