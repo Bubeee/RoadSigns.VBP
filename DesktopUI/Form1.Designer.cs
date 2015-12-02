@@ -49,6 +49,7 @@
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.RotateButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sourcePictureBox)).BeginInit();
@@ -278,12 +279,23 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // RotateButton
+            // 
+            this.RotateButton.Location = new System.Drawing.Point(152, 449);
+            this.RotateButton.Name = "RotateButton";
+            this.RotateButton.Size = new System.Drawing.Size(90, 23);
+            this.RotateButton.TabIndex = 19;
+            this.RotateButton.Text = "Повернуть";
+            this.RotateButton.UseVisualStyleBackColor = true;
+            this.RotateButton.Click += new System.EventHandler(this.RotateButton_Click);
+            // 
             // ImageRecognitor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1045, 626);
+            this.Controls.Add(this.RotateButton);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button5);
@@ -337,6 +349,7 @@
     private System.Windows.Forms.Button button5;
     private System.Windows.Forms.Button button4;
     private System.Windows.Forms.Button button6;
+    private System.Windows.Forms.Button RotateButton;
   }
 }
 

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurfaceHandlingTests", "Sur
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{117A7301-95CD-4D22-8442-F07D9C69B928}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homography", "Homography\Homography.csproj", "{830322CD-4B9F-4D19-92C4-16C74345533B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{1284C0EC-2745-495F-8C15-FE83E5B72A5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1284C0EC-2745-495F-8C15-FE83E5B72A5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1284C0EC-2745-495F-8C15-FE83E5B72A5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{830322CD-4B9F-4D19-92C4-16C74345533B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{830322CD-4B9F-4D19-92C4-16C74345533B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{830322CD-4B9F-4D19-92C4-16C74345533B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{830322CD-4B9F-4D19-92C4-16C74345533B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
