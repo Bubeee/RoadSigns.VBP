@@ -17,13 +17,13 @@ namespace SurfaceHandling
     {
         private readonly SameList _sameList = new SameList();
 
-        public readonly int PixColor;  
+        public readonly int PixColor;
         public SurfaceLabeler(int pixColor = 0)
         {
             PixColor = pixColor;
             //choose = new Func<bool>(a => a == 1); 
         }
-        public ImgInfo Labeling(int[,] img, Bitmap bitmap) 
+        public ImgInfo Labeling(int[,] img, Bitmap bitmap)
         {
             int[,] labels = new int[img.GetLength(0), img.GetLength(1)];
             int l = 1;
@@ -37,25 +37,25 @@ namespace SurfaceHandling
             for (int i = 0; i < img.GetLength(1); i++) // weight
                 for (int j = 0; j < img.GetLength(0); j++)
                 {
-                    if (allClasses.Contains(labels[j, i])) 
-                        labels[j,i] = _sameList.SerchClass(labels[j, i]);
+                    if (allClasses.Contains(labels[j, i]))
+                        labels[j, i] = _sameList.SerchClass(labels[j, i]);
                     if (classes.ContainsKey(labels[j, i]))
                         classes[labels[j, i]].Weight++;
-                    else 
-                        classes.Add(labels[j, i],new PixelClass(){Class = labels[j, i],  Weight = 1, Angles = new Angles()});
+                    else
+                        classes.Add(labels[j, i], new PixelClass() { Class = labels[j, i], Weight = 1, Angles = new Angles() });
                 }
 
             var inf = new ImgInfo()
             {
-                Labels =  labels,
-                OldPicture  = bitmap
+                Labels = labels,
+                OldPicture = bitmap
             };
 
             inf.Classes = classes;
 
-            
+
             Signer.GetSigns(inf);
-            foreach (var c  in inf.Classes.Values)
+            foreach (var c in inf.Classes.Values)
             {
                 Signer.GetFourWeight(c, inf);
             }
@@ -65,7 +65,7 @@ namespace SurfaceHandling
             RemoveByDesigener(inf, designer);
 
             LinkedLetters(inf);
-           
+
             RemoveByDesigener(inf, DesigerConfiguration.GetSecondConfiguration(inf));
 
 
@@ -84,26 +84,26 @@ namespace SurfaceHandling
                 {
                     for (int j = v.Angles.Left.X; j < v.Angles.Right.X; j++)
                     {
-                        if (labels[j,i] == 0)
+                        if (labels[j, i] == 0)
                         {
-                            bright += bitmap.GetPixel(j,i).GetBrightness();
-                            count ++;
+                            bright += bitmap.GetPixel(j, i).GetBrightness();
+                            count++;
                         }
                     }
-                    
+
                 }
                 v.WBrtight = count != 0 ? bright / count : 0;
             }
 
             if (inf.Classes.Values.Any())
             {
-                inf.Brightnest = (int) (inf.Classes.Values.ToList().Min(x => x.WBrtight)*255);
+                inf.Brightnest = (int)(inf.Classes.Values.ToList().Min(x => x.WBrtight) * 255);
 
                 int iter = 0;
                 int clcount = inf.Classes.Values.Count;
                 for (int i = 1; i <= clcount; i++)
                 {
-                    inf.Classes.Add(-i, new PixelClass() {Class = -i, Weight = 0});
+                    inf.Classes.Add(-i, new PixelClass() { Class = -i, Weight = 0 });
                 }
                 var blist = inf.Classes.Values.OrderBy(x => x.WBrtight).ToList();
                 foreach (var v in blist)
@@ -115,13 +115,13 @@ namespace SurfaceHandling
                         var a = v.Angles.Top;
 
 
-                        RecursiveFill(a.X, a.Y - 3, inf, iter, (int) (v.WBrtight*255));
+                        RecursiveFill(a.X, a.Y - 3, inf, iter, (int)(v.WBrtight * 255));
                         a = v.Angles.Bottom;
-                        RecursiveFill(a.X, a.Y + 3, inf, iter, (int) (v.WBrtight*255));
+                        RecursiveFill(a.X, a.Y + 3, inf, iter, (int)(v.WBrtight * 255));
                         a = v.Angles.Left;
-                        RecursiveFill(a.X - 3, a.Y, inf, iter, (int) (v.WBrtight*255));
+                        RecursiveFill(a.X - 3, a.Y, inf, iter, (int)(v.WBrtight * 255));
                         a = v.Angles.Right;
-                        RecursiveFill(a.X + 3, a.Y, inf, iter, (int) (v.WBrtight*255));
+                        RecursiveFill(a.X + 3, a.Y, inf, iter, (int)(v.WBrtight * 255));
                     }
                 }
 
@@ -168,36 +168,36 @@ namespace SurfaceHandling
 
 
                     }
-                    
+
             foreach (var r in classesToRemove)
             {
                 inf.Classes.Remove(r);
             }
         }
 
-        public void RecursiveFill( int x, int y, ImgInfo info, int cl, int brightnes)
+        public void RecursiveFill(int x, int y, ImgInfo info, int cl, int brightnes)
         {
-           
-            if (x>=0 && x < info.OldPicture.Width && y >= 0 && y < info.OldPicture.Height &&
-                brightnes-10 < info.OldPicture.GetPixel(x, y).GetBrightness() * 255
-                && info.Labels[x,y]==0)
+
+            if (x >= 0 && x < info.OldPicture.Width && y >= 0 && y < info.OldPicture.Height &&
+                brightnes - 10 < info.OldPicture.GetPixel(x, y).GetBrightness() * 255
+                && info.Labels[x, y] == 0)
             {
                 info.Classes[cl].Weight++;
-                
-                info.Labels[x,y] = cl;
+
+                info.Labels[x, y] = cl;
                 RecursiveFill(x - 1, y, info, cl, brightnes);
                 RecursiveFill(x + 1, y, info, cl, brightnes);
                 RecursiveFill(x, y + 1, info, cl, brightnes);
                 RecursiveFill(x, y - 1, info, cl, brightnes);
             }
         }
-      
+
 
         private float rangeLeft = 0.34f;
         private float rangeRight = 3f;
         public bool WH(PixelClass cl)
         {
-            var ratio = (float) cl.Height/cl.Width;
+            var ratio = (float)cl.Height / cl.Width;
             return ratio > rangeLeft && ratio < rangeRight;
         }
 
@@ -209,51 +209,51 @@ namespace SurfaceHandling
             {
                 foreach (var v2 in inf.Classes.Values)
                 {
-                    if (v != v2 && v.Weight > 40 
-                        && WH(v) &&  WH(v2) 
-                        && ((float)v.Weight)/v2.Weight > 0.5 && ((float)v.Weight)/v2.Weight < 2
+                    if (v != v2 && v.Weight > 40
+                        && WH(v) && WH(v2)
+                        && ((float)v.Weight) / v2.Weight > 0.5 && ((float)v.Weight) / v2.Weight < 2
                         )
                     {
-                        var s = Math.Sqrt((v.Center.X - v2.Center.X)*(v.Center.X - v2.Center.X) +
-                        (v.Center.Y - v2.Center.Y)*(v.Center.Y - v2.Center.Y));
-                        
-                        if (s < Math.Max(v.Width,v.Height)*1.75)
+                        var s = Math.Sqrt((v.Center.X - v2.Center.X) * (v.Center.X - v2.Center.X) +
+                        (v.Center.Y - v2.Center.Y) * (v.Center.Y - v2.Center.Y));
+
+                        if (s < Math.Max(v.Width, v.Height) * 1.75)
                         {
-                           inf.LincedLaters.Add(v.Class);
-                           inf.LincedLaters.Add(v2.Class);
-                           v.LikedClass.Add(v2);
-                           v2.LikedClass.Add(v);
-                           inf.Lines.Add(Draw.Draw.GetLineFunc(new Point(v.Center.X, v.Center.Y), new Point(v2.Center.X, v2.Center.Y)));
+                            inf.LincedLaters.Add(v.Class);
+                            inf.LincedLaters.Add(v2.Class);
+                            v.LikedClass.Add(v2);
+                            v2.LikedClass.Add(v);
+                            inf.Lines.Add(Draw.Draw.GetLineFunc(new Point(v.Center.X, v.Center.Y), new Point(v2.Center.X, v2.Center.Y)));
                         }
 
                     }
                 }
             }
-        }  
-        
+        }
+
 
         #region Fill
-        private void Fill(int[,] img, int[,] label, int x, int y, ref int l) 
+        private void Fill(int[,] img, int[,] label, int x, int y, ref int l)
         {
-            if (img[y, x] ==PixColor)
+            if (img[y, x] == PixColor)
             {
                 return;
             }
-            if ( !( IsBLabeled(label, y,x) || IsCLabeled(label, y,x) ) )
+            if (!(IsBLabeled(label, y, x) || IsCLabeled(label, y, x)))
             {
                 l++;
                 label[y, x] = l;
                 return;
             }
-            
-            if (IsBLabeled(label, y, x) && IsCLabeled(label, y, x)) 
+
+            if (IsBLabeled(label, y, x) && IsCLabeled(label, y, x))
             {
                 label[y, x] = label[y - 1, x];
                 if (label[y - 1, x] != label[y, x - 1])
                 {
                     _sameList.Add(label[y, x - 1], label[y - 1, x]);
                 }
-                return;     
+                return;
             }
             if (IsBLabeled(label, y, x))
             {
@@ -262,21 +262,21 @@ namespace SurfaceHandling
             }
             if (IsCLabeled(label, y, x))
             {
-                label[y, x] = label[y-1, x];
+                label[y, x] = label[y - 1, x];
             }
         }
 
-        public bool IsBLabeled(int[,] label, int y, int x) 
+        public bool IsBLabeled(int[,] label, int y, int x)
         {
             return !(x - 1 < 0) && label[y, x - 1] > 0;
         }
 
         public bool IsCLabeled(int[,] label, int y, int x)
         {
-            return !(y - 1 < 0) && label[y-1, x] > 0;
+            return !(y - 1 < 0) && label[y - 1, x] > 0;
         }
         #endregion
 
-        
+
     }
 }

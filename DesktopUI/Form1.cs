@@ -323,13 +323,23 @@ namespace DesktopUI
 
         private void RotateButton_Click(object sender, EventArgs e)
         {
-            var point11 = new PointF(331, 238);               // входные данные - координаты левой верхней точки 
-            var point12 = new PointF(623, 188);              // правый верх
-            var point13 = new PointF(623, 255);             // правый низ
-            var point14 = new PointF(332, 312);
+            //var point11 = new PointF(381, 439);
+            //var point12 = new PointF(900, 467);
+            //var point13 = new PointF(905, 574);
+            //var point14 = new PointF(386, 535);
+
+            //var point11 = new PointF(377, 436);
+            //var point12 = new PointF(900, 436);
+            //var point13 = new PointF(912, 541);
+            //var point14 = new PointF(389, 532);
+
+            var point11 = new PointF(241, 283);
+            var point12 = new PointF(442, 372);
+            var point13 = new PointF(437, 466);
+            var point14 = new PointF(238, 345);
 
             var srcPoints = new PointF[] { point11, point12, point13, point14 };
-          
+
             resultPictureBox.Image = Homograph.Rectification(_currentImage, srcPoints);
         }
     }
